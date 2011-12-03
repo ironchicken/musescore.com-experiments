@@ -1,0 +1,45 @@
+#!/usr/bin/perl
+
+use Musescore::API qw(get_scores);
+use Musescore::Caching qw(cache_score cache_all);
+
+sub test_get_scores {
+    my $scores = API::get_scores({text => "Beethoven", count => 100});
+
+    foreach my $score (@{ $scores }) {
+	printf("ID: %s; title: %s; composer: %s\n", $score->{id}, $score->{title}, $score->{composer});
+    }
+}
+
+
+sub test_cache_score {
+    use DBI;
+    
+    my %db_attrs = (RaiseError  => 1,
+		    PrintError  => 0);
+    
+    my %db_opts = (database => "DBI:mysql:musescore",
+		   user     => "root",
+		   password => "tbatst",
+		   attrs    => \%db_attrs);
+
+    my $dbh = DBI->connect($db_opts{database},
+			   $db_opts{user},
+			   $db_opts{password})
+	or die ("Could not connect to database.\n");
+
+    my $insert_score = $dbh->prepare(qq(INSERT INTO scores (id, musicxml) VALUES (?,?)));
+
+    Caching::cache_score($insert_score, "31966", "917627269d");
+}
+
+sub test_cache_all {
+    my $scores = API::get_scores({text => "Fur Elise", count => 100});
+    Caching::cache_all($scores);
+}
+
+sub main {
+    test_cache_all;
+}
+
+main;
