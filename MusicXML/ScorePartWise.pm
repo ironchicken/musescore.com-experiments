@@ -42,7 +42,8 @@ our @ISA = qw(Exporter);
 our @EXPORT_OK = qw(new parse key set_key time set_time clef set_clef);
 
 sub new {
-    my $self = {id        => undef,
+    my $self = {score     => undef,
+		id        => undef,
 		part_name => undef,
 
 		# FIXME These are really <measure> properties, but
@@ -61,6 +62,8 @@ sub new {
 sub parse {
 
 }
+
+sub score { $_[0]->{part}; }
 
 sub key { $_[0]->{key}; }
 sub set_key {
@@ -87,7 +90,8 @@ our @ISA = qw(Exporter);
 our @EXPORT_OK = qw(new parse number set_number);
 
 sub new {
-    my $self = {number => undef,
+    my $self = {part   => undef,
+		number => undef,
 		notes  => []};
     bless($self);
     return $self;
@@ -96,6 +100,8 @@ sub new {
 sub parse {
 
 }
+
+sub part { $_[0]->{part}; }
 
 sub number { $_[0]->{number}; }
 sub set_number {
@@ -110,7 +116,8 @@ our @ISA = qw(Exporter);
 our @EXPORT_OK = qw(new parse pitch set_pitch duration set_duration type set_type lyric set_lyric);
 
 sub new {
-    my $self = {pitch    => {step => undef, octave => undef},
+    my $self = {measure  => undef,
+		pitch    => {step => undef, octave => undef},
 		duration => undef,
 		type     => undef,
 		lyric    => {syllabic => undef, text => undef}
@@ -122,6 +129,8 @@ sub new {
 sub parse {
 
 }
+
+sub measure { $_[0]->{measure}; }
 
 sub pitch { $_[0]->{pitch}; }
 sub set_pitch {
