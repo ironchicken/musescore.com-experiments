@@ -47,7 +47,7 @@ sub new {
 
 		# FIXME These are really <measure> properties, but
 		# let's just get them from the first <measure> and
-		# maybe die if such properties are found elsehwhere
+		# maybe die if such properties are found elsewhere
 		divisions => undef,
 		key       => {fifths => undef, mode => undef},
 		time      => {beats => undef, beat_type => undef},
@@ -62,12 +62,23 @@ sub parse {
 
 }
 
-sub key      { $_[0]->{key}; }
-sub set_key  { my ($self, $fifths, $mode) = @_;     $self->{key}  = {fifths => $fifths, mode     => $mode}; }
-sub time     { $_[0]->{time}; }
-sub set_time { my ($self, $beats, $beat_type) = @_; $self->{time} = {beats  => $beats, beat_type => $beat_type}; }
-sub clef     { $_[0]->{clef}; }
-sub set_clef { my ($self, $sign, $line) = @_;       $self->{clef} = {sign    => $sign, line      => $line}; }
+sub key { $_[0]->{key}; }
+sub set_key {
+    my ($self, $fifths, $mode) = @_;
+    $self->{key} = {fifths => $fifths, mode => $mode};
+}
+
+sub time { $_[0]->{time}; }
+sub set_time {
+    my ($self, $beats, $beat_type) = @_;
+    $self->{time} = {beats => $beats, beat_type => $beat_type};
+}
+
+sub clef { $_[0]->{clef}; }
+sub set_clef {
+    my ($self, $sign, $line) = @_;
+    $self->{clef} = {sign => $sign, line => $line};
+}
 
 package Measure;
 
