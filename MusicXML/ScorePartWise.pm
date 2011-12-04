@@ -98,10 +98,53 @@ sub parse {
 }
 
 sub number { $_[0]->{number}; }
-
 sub set_number {
     my ($self, $number) = @_;
     $self->{number} = $number;
 }
-   
+
+package Note;
+
+require Exporter;
+our @ISA = qw(Exporter);
+our @EXPORT_OK = qw(new parse pitch set_pitch duration set_duration type set_type lyric set_lyric);
+
+sub new {
+    my $self = {pitch    => {step => undef, octave => undef},
+		duration => undef,
+		type     => undef,
+		lyric    => {syllabic => undef, text => undef}
+    };
+    bless($self);
+    return $self;
+}
+
+sub parse {
+
+}
+
+sub pitch { $_[0]->{pitch}; }
+sub set_pitch {
+    my ($self, $step, $octave) = @_;
+    $self->{pitch} = {step => $step, octave => $octave};
+}
+
+sub duration { $_[0]->{duration}; }
+sub set_duration {
+    my ($self, $duration) = @_;
+    $self->{duration} = $duration;
+}
+
+sub type { $_[0]->{type}; }
+sub set_type {
+    my ($self, $type) = @_;
+    $self->{type} = $type;
+}
+
+sub lyric { $_[0]->{lyric}; }
+sub set_lyric {
+    my ($self, $syllabic, $text) = @_;
+    $self->{lyric} = {syllabic => $syllabic, text => $text};
+}
+
 1;
