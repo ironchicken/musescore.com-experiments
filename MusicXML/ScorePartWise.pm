@@ -13,11 +13,11 @@ package ScorePartWise;
 
 require Exporter;
 our @ISA = qw(Exporter);
-our @EXPORT_OK = qw(new parse part set_part);
+our @EXPORT_OK = qw(new parse part set_part parts xpath measures notes);
 
 sub new {
-    my $self = {};
-    $self->{parts} = [];
+    my $self = {parts    => [],
+		musicxml => undef};
     bless($self);
     return $self;
 }
@@ -35,13 +35,40 @@ sub parse {
 }
 
 sub part {
-    my ($self, $part_number) = @_;
-    return $self->{parts}[$part_number];
+    my ($self, $part_id) = @_;
+    for my $part (@{ $self->{parts} }) {
+	if ($part->id eq $part_id) { return $part; }
+    }
 }
 
 sub set_part {
     my ($self, $part_number, $part) = @_;
-    $self->{parts}[$part_number] = $part;
+    splice(@{ $self->{parts} }, $part_number, $part);
+}
+
+sub parts { $_[0]->{parts}; }
+
+sub xpath {
+    my ($self, $xpath) = @_;
+    return $self->{musicxml}->find($xpath)->get_nodelist;
+}
+
+sub measures {
+    my $self = shift;
+    my @measures = ();
+    for my $measure_frag ($self->xpath(q(//measure))) {
+	push @measures, Measure->new(undef)->parse($measure_frag);
+    }
+    return @measures;
+}
+
+sub notes {
+    my $self = shift;
+    my @notes = ();
+    for my $note_frag ($self->xpath(q(//note))) {
+	push @notes, Note->new(undef)->parse($note_frag);
+    }
+    return @notes;
 }
 
 package Part;
@@ -72,9 +99,14 @@ sub parse {
     my ($part_frag) = @_;
 }
 
+sub score { $_[0]->{score}; }
+
+sub id { $_[0]->{id}; }
+sub set_id {
+    my ($self, $id) = @_;
+    $self->{id} = $id;
 }
 
-sub score { $_[0]->{part}; }
 
 sub key { $_[0]->{key}; }
 sub set_key {
