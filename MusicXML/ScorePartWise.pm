@@ -12,7 +12,7 @@ package ScorePartWise;
 
 require Exporter;
 our @ISA = qw(Exporter);
-our @EXPORT_OK = qw(new parse);
+our @EXPORT_OK = qw(new parse part set_part);
 
 sub new {
     my $self = {};
@@ -39,7 +39,7 @@ package Part;
 
 require Exporter;
 our @ISA = qw(Exporter);
-our @EXPORT_OK = qw(new parse);
+our @EXPORT_OK = qw(new parse key set_key time set_time clef set_clef);
 
 sub new {
     my $self = {id        => undef,
@@ -73,7 +73,7 @@ package Measure;
 
 require Exporter;
 our @ISA = qw(Exporter);
-our @EXPORT_OK = qw(new parse);
+our @EXPORT_OK = qw(new parse number set_number);
 
 sub new {
     my $self = {number => undef,
