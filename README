@@ -1,0 +1,13 @@
+Musescore.com Experiments
+=========================
+
+This repository contains some Perl modules wrapping over the
+Musescore.com user-contributed score library API as well as a basic
+MusicXML API. It also includes some basic MusicXML feature extractors,
+hence its intended use as a tool for experimentation.
+
+It was developed during Music Hack Day London on 3/4 December 2011.
+
+https://github.com/musescore-com/api/wiki/
+http://www.recordare.com/musicxml/specification
+http://wiki.musichackday.org/index.php?title=Main_Page
