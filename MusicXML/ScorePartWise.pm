@@ -6,6 +6,7 @@
 # Author: Richard Lewis
 # Email: richard@rjlewis.me.uk
 
+use XML::XPath;
 use strict;
 
 package ScorePartWise;
@@ -22,7 +23,15 @@ sub new {
 }
 
 sub parse {
+    my ($self, $musicxml) = @_;
+    $self->{musicxml} = XML::XPath->new(xml => $musicxml);
 
+    foreach my $part ($self->{musicxml}->find(q(//score-part))->get_nodelist) {
+	my $id = $self->{musicxml}->findvalue(q(@id), $part);
+	my $new_part = Part->new($self);
+	$new_part->parse($self->{musicxml}->find(qq(//part[\@id="$id"]))->get_node(1));
+	push @{ $self->{parts} }, $new_part;
+    }
 }
 
 sub part {
@@ -60,6 +69,8 @@ sub new {
 }
 
 sub parse {
+    my ($part_frag) = @_;
+}
 
 }
 
@@ -98,7 +109,7 @@ sub new {
 }
 
 sub parse {
-
+    my ($measure_frag) = @_;
 }
 
 sub part { $_[0]->{part}; }
@@ -127,7 +138,7 @@ sub new {
 }
 
 sub parse {
-
+    my ($note_frag) = @_;
 }
 
 sub measure { $_[0]->{measure}; }
