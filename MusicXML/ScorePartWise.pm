@@ -78,7 +78,7 @@ our @ISA = qw(Exporter);
 our @EXPORT_OK = qw(new parse key set_key time set_time clef set_clef);
 
 sub new {
-    my $self = {score     => undef,
+    my $self = {score     => shift,
 		id        => undef,
 		part_name => undef,
 
@@ -133,7 +133,7 @@ our @ISA = qw(Exporter);
 our @EXPORT_OK = qw(new parse number set_number);
 
 sub new {
-    my $self = {part   => undef,
+    my $self = {part   => shift,
 		number => undef,
 		notes  => []};
     bless($self);
@@ -159,7 +159,7 @@ our @ISA = qw(Exporter);
 our @EXPORT_OK = qw(new parse pitch set_pitch duration set_duration type set_type lyric set_lyric);
 
 sub new {
-    my $self = {measure  => undef,
+    my $self = {measure  => shift,
 		pitch    => {step => undef, octave => undef},
 		duration => undef,
 		type     => undef,
