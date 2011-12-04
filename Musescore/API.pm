@@ -35,7 +35,7 @@ sub get_scores {
     $http_args->{oauth_consumer_key} = "musichackday";
 
     my $ua = LWP::UserAgent->new;
-    $ua->agent("Mozilla/5.0 (X11; Linux i686; rv:8.0) Gecko/20100101 conkeror/1.0pre");
+    $ua->agent("MusicHackDay/0.1");
 
     my $score_resource = URI->new("http://api.musescore.com/services/rest/score");
 
