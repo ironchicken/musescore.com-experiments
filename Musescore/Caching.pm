@@ -42,16 +42,16 @@ sub cache_all {
 
     my $insert_score = $dbh->prepare(qq(INSERT INTO scores (id, musicxml) VALUES (?,?)));
 
+    my $ua = LWP::UserAgent->new;
+    $ua->agent("MusicHackDay/0.1");
+
     foreach my $score (@{ $scores }) {
-	cache_score($insert_score, $score->{id}, $score->{secret});
+	cache_score($ua, $insert_score, $score->{id}, $score->{secret});
     }
 }
 
 sub cache_score {
-    my ($insert_stmt, $id, $secret) = @_;
-
-    my $ua = LWP::UserAgent->new;
-    $ua->agent("MusicHackDay/0.1");
+    my ($ua, $insert_stmt, $content_type, $id, $secret) = @_;
 
     my $score_resource = URI->new(sprintf("http://static.musescore.com/%s/%s/score.mxl", $id, $secret));
 
