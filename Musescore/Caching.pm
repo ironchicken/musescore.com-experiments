@@ -35,6 +35,22 @@ sub make_dbh {
 	or die ("Could not connect to database.\n");
 }
 
+my $retrieval_methods = {
+    mxl => sub {
+	my $mxl = shift;
+	my $container; my $musicxml;
+	IO::Uncompress::Unzip::unzip (\$mxl, \$container, Name => "META-INF/container.xml");
+	my $xp = XML::XPath->new(xml => $container);
+	my $musicxml_file = $xp->findvalue(q(//rootfile[1]/@full-path));
+	IO::Uncompress::Unzip::unzip (\$mxl, \$musicxml, Name => $musicxml_file);
+	return $musicxml;
+    },
+    mid => sub {
+	my $midi = shift;
+	return $midi;
+    }
+};
+    
 sub cache_all {
     my $scores = shift;
 
@@ -46,7 +62,7 @@ sub cache_all {
     $ua->agent("MusicHackDay/0.1");
 
     foreach my $score (@{ $scores }) {
-	cache_score($ua, $insert_score, $score->{id}, $score->{secret});
+	cache_score($ua, $insert_score, "mxl", $score->{id}, $score->{secret});
     }
 }
 
@@ -60,14 +76,10 @@ sub cache_score {
     my $response = $ua->request($req);
 
     if ($response->is_success) {
-	my $mxl = $response->content;
-	my $container; my $musicxml;
-	IO::Uncompress::Unzip::unzip (\$mxl, \$container, Name => "META-INF/container.xml");
-	my $xp = XML::XPath->new(xml => $container);
-	my $musicxml_file = $xp->findvalue(q(//rootfile[1]/@full-path));
-	IO::Uncompress::Unzip::unzip (\$mxl, \$musicxml, Name => $musicxml_file);
-	$insert_stmt->execute($id, $musicxml);
+	my $fetch = $retrieval_methods->{$content_type} or die "No retrieval method for content type: $content_type\n";
+	my $content = $response->content;
+	$insert_stmt->execute($id, &$fetch($content));
+	printf("cache_score: Cached: %s\n", $id);
     }
-    printf("cache_score: Cached: %s\n", $id);
 }
 
