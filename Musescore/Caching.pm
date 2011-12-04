@@ -80,6 +80,8 @@ sub cache_score {
 	my $content = $response->content;
 	$insert_stmt->execute($id, &$fetch($content));
 	printf("cache_score: Cached: %s\n", $id);
+    } else {
+	die "Could not retrieval $score_resource\n";
     }
 }
 
