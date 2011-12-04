@@ -51,7 +51,8 @@ sub new {
 		divisions => undef,
 		key       => {fifths => undef, mode => undef},
 		time      => {beats => undef, beat_type => undef},
-		clef      => {sign => undef, line => undef}
+		clef      => {sign => undef, line => undef},
+		measures  => []
     };
     bless($self);
     return $self;
@@ -68,4 +69,28 @@ sub set_time { my ($self, $beats, $beat_type) = @_; $self->{time} = {beats  => $
 sub clef     { $_[0]->{clef}; }
 sub set_clef { my ($self, $sign, $line) = @_;       $self->{clef} = {sign    => $sign, line      => $line}; }
 
+package Measure;
+
+require Exporter;
+our @ISA = qw(Exporter);
+our @EXPORT_OK = qw(new parse);
+
+sub new {
+    my $self = {number => undef,
+		notes  => []};
+    bless($self);
+    return $self;
+}
+
+sub parse {
+
+}
+
+sub number { $_[0]->{number}; }
+
+sub set_number {
+    my ($self, $number) = @_;
+    $self->{number} = $number;
+}
+   
 1;
